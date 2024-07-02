@@ -20,7 +20,7 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Self Build - Publish (main only)
+    - name: Publish (main only)
       if: github.event_name == 'push'
       shell: bash
       run: |

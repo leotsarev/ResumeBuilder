@@ -1,0 +1,11 @@
+profile="custom"
+[msbuild]
+project = "ResumeBuilder.sln"
+[github]
+user = "leotsarev"
+repo = "ResumeBuilder"
+[nuget]
+publish=false
+[[pack]]
+rid = ["win-x64"]
+kinds = ["zip"]

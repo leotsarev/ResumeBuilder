@@ -23,10 +23,11 @@ public class Program
     [Option]
     public bool ReadFromStdin { get; } = false;
 
-    public void OnExecute()
+    public async Task OnExecuteAsync()
     {
         Console.WriteLine($"Will parse '{MarkdownResumeName}' file using tags {string.Join(", ", IncludeTags)}");
-        string[] sourceResumeLines = ReadSourceResume();
+        var resumeReader = new ResumeReader(ReadFromStdin, MarkdownResumeName);
+        string[] sourceResumeLines = await resumeReader.ReadSourceResume();
 
         var sectionsFilter = new SectionsFilter(IncludeTags);
 
@@ -44,24 +45,5 @@ public class Program
 
         File.WriteAllText(ResumeName, htmlOutput.WriteHtml());
         Console.WriteLine($"Result written to {ResumeName}");
-    }
-
-    private string[] ReadSourceResume()
-    {
-        string text;
-
-        if (ReadFromStdin)
-        {
-            var reader = new StreamReader(Console.OpenStandardInput());
-            text = reader.ReadToEnd();
-
-        }
-        else
-        {
-            text = File.ReadAllText(MarkdownResumeName);
-        }
-        string[] sourceResumeLines;
-        sourceResumeLines = text.Split("\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        return sourceResumeLines;
     }
 }

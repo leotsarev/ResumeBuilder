@@ -28,3 +28,20 @@ jobs:
         dotnet-releaser run --github-token "${{secrets.GITHUB_TOKEN}}" dotnet-releaser.toml
 
 
+    - name: Build docker
+      if: github.event_name == 'push'
+      shell: bash
+      run: |
+        dotnet publish --os linux --arch x64 /t:PublishContainer
+    
+    - name: Login to docker registry
+      if: github.event_name == 'push'
+      shell: bash
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin=
+
+    - name: Push
+      if: github.event_name == 'push'
+      shell: bash
+      run: |
+        docker tag resumebuilder ghcr.io/leotsarev/resumebuilder
+        docker push ghcr.io/leotsarev/resumebuilder

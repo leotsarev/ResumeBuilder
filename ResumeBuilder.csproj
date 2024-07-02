@@ -9,6 +9,9 @@
 	<RootNamespace>Tsarev.ResumeBuilder</RootNamespace>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PublishSingleFile>true</PublishSingleFile>
+	<EnableSdkContainerSupport>true</EnableSdkContainerSupport>
+	<TargetName>resume-builder</TargetName>
+	<ContainerImageTag>$(Version)</ContainerImageTag>
   </PropertyGroup>
 
   <ItemGroup>

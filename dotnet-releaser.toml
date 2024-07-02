@@ -6,7 +6,8 @@ user = "leotsarev"
 repo = "ResumeBuilder"
 [brew]
 publish=false
-
+[scoop]
+publish=false
 [nuget]
 publish=false
 [[pack]]

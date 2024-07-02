@@ -2,6 +2,8 @@
 profile="custom"
 [msbuild]
 project = "ResumeBuilder.sln"
+[msbuild.properties]
+PublishTrimmed = false
 [github]
 user = "leotsarev"
 repo = "ResumeBuilder"

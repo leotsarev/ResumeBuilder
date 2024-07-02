@@ -20,11 +20,13 @@ public class Program
     [Option]
     public string[] IncludeTags { get; } = [];
 
+    [Option]
+    public bool ReadFromStdin { get; } = false;
+
     public void OnExecute()
     {
         Console.WriteLine($"Will parse '{MarkdownResumeName}' file using tags {string.Join(", ", IncludeTags)}");
-
-        var sourceResumeLines = File.ReadAllLines( MarkdownResumeName );
+        string[] sourceResumeLines = ReadSourceResume();
 
         var sectionsFilter = new SectionsFilter(IncludeTags);
 
@@ -44,4 +46,22 @@ public class Program
         Console.WriteLine($"Result written to {ResumeName}");
     }
 
+    private string[] ReadSourceResume()
+    {
+        string text;
+
+        if (ReadFromStdin)
+        {
+            var reader = new StreamReader(Console.OpenStandardInput());
+            text = reader.ReadToEnd();
+
+        }
+        else
+        {
+            text = File.ReadAllText(MarkdownResumeName);
+        }
+        string[] sourceResumeLines;
+        sourceResumeLines = text.Split("\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        return sourceResumeLines;
+    }
 }

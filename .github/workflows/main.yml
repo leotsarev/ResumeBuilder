@@ -37,7 +37,7 @@ jobs:
     - name: Login to docker registry
       if: github.event_name == 'push'
       shell: bash
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin=
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
 
     - name: Push
       if: github.event_name == 'push'

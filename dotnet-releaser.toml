@@ -4,8 +4,9 @@ project = "ResumeBuilder.sln"
 [github]
 user = "leotsarev"
 repo = "ResumeBuilder"
-[homebrew]
+[brew]
 publish=false
+
 [nuget]
 publish=false
 [[pack]]

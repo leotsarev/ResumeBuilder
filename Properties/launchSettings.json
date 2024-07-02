@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ResumeBuilder": {
+      "commandName": "Project",
+      "commandLineArgs": "test-resume.md "
+    }
+  }
+}

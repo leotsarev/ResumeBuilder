@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "github-actions" 
+    directory: "/" 
+    schedule:
+      interval: "daily"
+    groups:
+        aspnetcore:
+          applies-to: version-updates
+          patterns:
+            - "Microsoft.AspNetCore*"
+            - "dotnet/aspnet"
+        xunit:
+          applies-to: version-updates
+          patterns:
+            - "xunit*"

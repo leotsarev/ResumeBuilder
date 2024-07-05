@@ -1,32 +1,34 @@
 ﻿using Markdig;
 using McMaster.Extensions.CommandLineUtils;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Tsarev.ResumeBuilder;
 
-[HelpOption]
-[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class Program
 {
-    public static int Main(string[] args)
-        => CommandLineApplication.Execute<Program>(args);
-
-    [Argument(0, Description = "Имя markdown файла")]
-    public string MarkdownResumeName { get; } = "resume.md";
-
-    [Argument(1, Description = "Имя готового резюме")]
-    public string ResumeName { get; } = "resume.html";
-
-    [Option]
-    public string[] IncludeTags { get; } = [];
-
-    [Option]
-    public bool ReadFromStdin { get; } = false;
-
-    public async Task OnExecuteAsync()
+    public static Task<int> Main(string[] args)
     {
-        Console.WriteLine($"Will parse '{MarkdownResumeName}' file using tags {string.Join(", ", IncludeTags)}");
-        var resumeReader = new ResumeReader(ReadFromStdin, MarkdownResumeName);
+        var app = new CommandLineApplication
+        {
+        };
+        var markdownResumeName = app.Option<string>("--input", "Имя markdown файла", CommandOptionType.SingleValue);
+        var resumeName = app.Option<string>("--output", "Имя готового резюме", CommandOptionType.SingleValue);
+        var includeTags = app.Option<string>("--include-tag <tags>", "Теги, которые нужно включить", CommandOptionType.MultipleValue);
+        app.HelpOption();
+        app.OnExecuteAsync(async token =>
+        {
+            await OnExecuteAsync(markdownResumeName.Value(), resumeName.Value(), [.. includeTags.Values]);
+        });
+        if (args.Length > 0 && args[0] == "dotnet")
+        {
+            args = args.Skip(2).ToArray();
+        }
+        return app.ExecuteAsync(args);
+    }
+
+    public static async Task OnExecuteAsync(string? markdownResumeName, string? htmlResumeName, string[] IncludeTags)
+    {
+        Console.WriteLine($"Will parse '{markdownResumeName}' file using tags {string.Join(", ", IncludeTags)}");
+        var resumeReader = new ResumeReader(markdownResumeName);
         string[] sourceResumeLines = await resumeReader.ReadSourceResume();
 
         var sectionsFilter = new SectionsFilter(IncludeTags);
@@ -43,7 +45,15 @@ public class Program
 
         var htmlOutput = new HtmlOutput(markdownPipeline, parsed);
 
-        File.WriteAllText(ResumeName, htmlOutput.WriteHtml());
-        Console.WriteLine($"Result written to {ResumeName}");
+        if (htmlResumeName is null)
+        {
+            using var writer = new StreamWriter(Console.OpenStandardOutput());
+            await writer.WriteAsync(htmlOutput.WriteHtml());
+        }
+        else
+        {
+            File.WriteAllText(htmlResumeName, htmlOutput.WriteHtml());
+            Console.WriteLine($"Result written to {htmlResumeName}");
+        }
     }
 }

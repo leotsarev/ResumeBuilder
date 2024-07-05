@@ -1,20 +1,20 @@
 ﻿namespace Tsarev.ResumeBuilder;
 
-internal class ResumeReader(bool ReadFromStdin, string MarkdownResumeName)
+internal class ResumeReader(string? markdownResumeName)
 {
     public async Task<string[]> ReadSourceResume()
     {
         string text;
 
-        if (ReadFromStdin)
+        if (markdownResumeName is null)
         {
-            var reader = new StreamReader(Console.OpenStandardInput());
+            using var reader = new StreamReader(Console.OpenStandardInput());
             text = await reader.ReadToEndAsync();
 
         }
         else
         {
-            text = await File.ReadAllTextAsync(MarkdownResumeName);
+            text = await File.ReadAllTextAsync(markdownResumeName);
         }
         return text.Split("\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }

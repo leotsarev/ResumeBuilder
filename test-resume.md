@@ -4,12 +4,14 @@ description: Резюме Иванов Иван Иваныч
 author: Иванов Иван Иваныч
 language: ru
 ---
+
 <div style="BACKGROUND: #A05; COLOR: WHITE"> 
 <img style="float:right;border-radius:50%;width:70px;margin: 4px;border:2px solid black" src="test-avatar.png" />
 
 <span style="float:right;padding:15px">
   ivan@mail.ru <br /> &plus; 7 921 111 22 33
 </span>
+
 
 # Иванов Иван Иваныч
 

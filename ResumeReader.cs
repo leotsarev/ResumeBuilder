@@ -16,6 +16,6 @@ internal class ResumeReader(string? markdownResumeName)
         {
             text = await File.ReadAllTextAsync(markdownResumeName);
         }
-        return text.Split("\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        return text.Split("\n", StringSplitOptions.TrimEntries);
     }
 }

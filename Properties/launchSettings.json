@@ -2,7 +2,7 @@
   "profiles": {
     "ResumeBuilder": {
       "commandName": "Project",
-      "commandLineArgs": "test-resume.md "
+      "commandLineArgs": "--input test-resume.md --output test-resume.html"
     }
   }
 }
